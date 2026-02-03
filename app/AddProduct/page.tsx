@@ -1,9 +1,10 @@
 "use client"
 import { FormEvent, useState } from "react"
+import DropDown from "../components/DropDown"
 const AddProduct = () => {
 
   const [name, setName] = useState('')
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState('Housing & Utilities')
   const [price, setPrice] = useState('')
 
   const handleSubmit = async(e : FormEvent<HTMLFormElement>) =>{
@@ -40,7 +41,7 @@ const AddProduct = () => {
         <input type="text" className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
 
         <label className="label">Category</label>
-        <input type="text" className="input" value={category} onChange={(e) => setCategory(e.target.value)}  placeholder="Category" />
+        <DropDown value={category} canBeAnyName={setCategory} />
 
         <label className="label">Price</label>
         <input type="text" className="input" value={price} onChange={(e) => setPrice(e.target.value)}  placeholder="Price" />
