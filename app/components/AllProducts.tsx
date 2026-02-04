@@ -42,6 +42,10 @@ const AllProducts = () => {
         }
     }
 
+    const handleUpdate = async(id : number) =>{
+
+    }
+
 
   return (
         <>
@@ -61,6 +65,7 @@ const AllProducts = () => {
                             <td>{item.category}</td>
                             <td>{item.price.toString()}</td>
                             <td> <button onClick={ () => handleDelete(item.id)} className="btn btn-outline btn-error">Delete</button> </td>
+                            <td> <button onClick={ () => handleUpdate(item.id)} className="btn btn-outline btn-warning">Update</button> </td>
                         </tr>)}
                     </tbody>
                 </table>
