@@ -56,7 +56,8 @@ const AllProducts = () => {
                         <th>Name</th>
                         <th>Category</th>
                         <th>Price</th>
-                        <th>Action</th>
+                        <th>Delete Expense</th>
+                        <th>Edit Expense</th>
                     </tr>
                     </thead>
                     <tbody>
