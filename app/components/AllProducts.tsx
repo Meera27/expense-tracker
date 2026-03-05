@@ -18,13 +18,23 @@ const AllProducts = () => {
     }, [])
 
     const fetchExpenses = async() => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/expenses`)
-        const expense : Expense[] = await res.json()
-        setExpenses(expense)
+        try{
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/expenses`)
+            if(!res.ok){
+                throw new Error("Failed to Fetch");
+            }
+            const expenseData : Expense[] = await res.json()
+            setExpenses(Array.isArray(expenseData) ? expenseData : [])
+        }
+        catch(error){
+            console.error('Error :', error)
+            setExpenses([])
+        }
+
     }
 
 
-    const handleDelete = async(id : number) => {
+    async function handleDelete(id : number) {
         console.log(id)
         try{
             const res = await fetch(`/api/expenses/${id}`, {
@@ -42,12 +52,33 @@ const AllProducts = () => {
         }
     }
 
-    const handleUpdate = async(id : number) =>{
+    const handleUpdate = async(item: Expense) =>{
 
+        const updates = {
+        id: item.id,
+        name: item.name, // You can modify these values
+        category: item.category,
+        price: item.price
+    };
+        try{
+            const res = await fetch(`/api/expenses/${item.id}`,{
+                method: 'UPDATE',
+                headers: {
+                    'Content-Type' : 'application.json'
+                },
+                body: JSON.stringify(updates)
+            })
+
+            if(res.ok){
+                const updated = await res.json()
+                setExpenses(expense.map(item => item.id === item.id ? updated : item))
+            }
+        }catch (error) {
+        console.error('Error:', error)
     }
+}
 
-
-  return (
+return (
         <>
             <div className="overflow-x-auto">
                 <table className="table rounded-field">
@@ -66,13 +97,13 @@ const AllProducts = () => {
                             <td>{item.category}</td>
                             <td>{item.price.toString()}</td>
                             <td> <button onClick={ () => handleDelete(item.id)} className="btn btn-outline btn-error">Delete</button> </td>
-                            <td> <button onClick={ () => handleUpdate(item.id)} className="btn btn-outline btn-warning">Update</button> </td>
+                            <td> <button onClick={ () => handleUpdate(item)} className="btn btn-outline btn-warning">Update</button> </td>
                         </tr>)}
                     </tbody>
                 </table>
             </div>
         </>
-  )
+)
 }
 
 export default AllProducts
