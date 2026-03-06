@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import 'dotenv/config'
+import { useRouter } from 'next/navigation';
 
 interface Expense {
     id : number;
@@ -9,8 +10,9 @@ interface Expense {
     price : number;
 }
 
-const AllProducts = () => {
 
+const AllProducts = () => {
+    const router = useRouter()
     const [expense, setExpenses] = useState<Expense[]>([])
 
     useEffect(() =>{
@@ -52,32 +54,6 @@ const AllProducts = () => {
         }
     }
 
-    const handleUpdate = async(item: Expense) =>{
-
-        const updates = {
-        id: item.id,
-        name: item.name, // You can modify these values
-        category: item.category,
-        price: item.price
-    };
-        try{
-            const res = await fetch(`/api/expenses/${item.id}`,{
-                method: 'UPDATE',
-                headers: {
-                    'Content-Type' : 'application.json'
-                },
-                body: JSON.stringify(updates)
-            })
-
-            if(res.ok){
-                const updated = await res.json()
-                setExpenses(expense.map(item => item.id === item.id ? updated : item))
-            }
-        }catch (error) {
-        console.error('Error:', error)
-    }
-}
-
 return (
         <>
             <div className="overflow-x-auto">
@@ -97,7 +73,7 @@ return (
                             <td>{item.category}</td>
                             <td>{item.price.toString()}</td>
                             <td> <button onClick={ () => handleDelete(item.id)} className="btn btn-outline btn-error">Delete</button> </td>
-                            <td> <button onClick={ () => handleUpdate(item)} className="btn btn-outline btn-warning">Update</button> </td>
+                            <td> <button onClick={ () => router.push(`/edit/${item.id}`)} className="btn btn-outline btn-warning">Update</button> </td>
                         </tr>)}
                     </tbody>
                 </table>

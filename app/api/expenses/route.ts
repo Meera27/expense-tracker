@@ -34,28 +34,3 @@ export async function POST(request:NextRequest) {
         return NextResponse.json({error: "Internal server error"}, {status: 500})
     }
 }
-
-export async function PUT(request: NextRequest, {params} : {params : {id: string}}) {
-    try{
-        const {id} = params
-        const body = await request.json()
-        const {name, category, price} = body
-    if (!name || !category || price === undefined) {
-        return NextResponse.json(
-            { error: "Missing required fields: name, category, price" }, 
-            { status: 400 }
-        )
-    }
-    const updateItem = await prisma.expenses.update({ 
-            where : {id : parseInt(id) },
-            data: {name, category, price: Number(price)}
-            })
-    return NextResponse.json(updateItem, {status : 201})
-    }catch (error) {
-        console.error('PUT Error:', error)
-        return NextResponse.json(
-            { error: "Failed to update expense" }, 
-            { status: 500 }
-        )
-    }
-}
